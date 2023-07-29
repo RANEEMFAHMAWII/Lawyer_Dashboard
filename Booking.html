@@ -38,9 +38,10 @@
     <link href="css/style.css" rel="stylesheet">
 </head>
 <script>
-    $(document).ready(function(){
+$(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
         var actions = $("table td:last-child").html();
+
         // Append table with add row form on add new button click
         $(".add-new").click(function(){
             $(this).attr("disabled", "disabled");
@@ -51,10 +52,11 @@
                 '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
                 '<td>' + actions + '</td>' +
             '</tr>';
-            $("table").append(row);		
+            $("table").append(row);
             $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
             $('[data-toggle="tooltip"]').tooltip();
         });
+
         // Add row on add button click
         $(document).on("click", ".add", function(){
             var empty = false;
@@ -63,31 +65,38 @@
                 if(!$(this).val()){
                     $(this).addClass("error");
                     empty = true;
-                    selectElement = document.querySelector('#select1');
-                    output = selectElement.value;
-                    document.querySelector('.output').textContent = output;
+                
                 } else{
                     $(this).removeClass("error");
                 }
             });
+
+            // Get the selected value from the dropdown
+            var selectedService = $(this).parents("tr").find("#select1").val();
+
             $(this).parents("tr").find(".error").first().focus();
             if(!empty){
                 input.each(function(){
                     $(this).parent("td").html($(this).val());
-                });			
+                });
+
+                // Update the "Service" cell with the selected value
+                $(this).parents("tr").find("td:eq(1)").text($("#select1 option:selected").text());
+
                 $(this).parents("tr").find(".add, .edit").toggle();
                 $(".add-new").removeAttr("disabled");
             }
-
         });
+
         // Edit row on edit button click
-        $(document).on("click", ".edit", function(){		
+        $(document).on("click", ".edit", function(){
             $(this).parents("tr").find("td:not(:last-child)").each(function(){
                 $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
-            });		
+            });
             $(this).parents("tr").find(".add, .edit").toggle();
             $(".add-new").attr("disabled", "disabled");
         });
+
         // Delete row on delete button click
         $(document).on("click", ".delete", function(){
             $(this).parents("tr").remove();
